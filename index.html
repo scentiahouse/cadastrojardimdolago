@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro – Residencial Jardim do Lago</title>
+<link rel="icon" type="image/png" href="images/logo.webp">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f7f0;color:#333;min-height:100vh}
+header{background:linear-gradient(135deg,#1a4731,#2d7a4f);color:white;text-align:center;padding:32px 20px 24px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.logo-header{width:130px;height:130px;border-radius:50%;overflow:hidden;border:4px solid rgba(255,255,255,0.5);margin:0 auto 14px;background:white}
+.logo-header img{width:100%;height:100%;object-fit:cover;display:block}
+header h1{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+header p{font-size:.9rem;opacity:.85}
+.container{max-width:860px;margin:32px auto;padding:0 16px 60px}
+.card{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:28px 32px;margin-bottom:24px}
+.card h2{font-size:1.1rem;color:#1a4731;border-bottom:2px solid #c8e6c9;padding-bottom:10px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.form-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.fg{display:flex;flex-direction:column;flex:1;min-width:180px}
+.fg.full{flex:0 0 100%}
+.fg.half{flex:0 0 calc(50% - 8px)}
+.fg.third{flex:0 0 calc(33.33% - 11px)}
+.fg label{font-size:.82rem;font-weight:600;color:#2d5a3d;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+input[type=text],input[type=email],input[type=tel],textarea{border:1.5px solid #a5d6a7;border-radius:7px;padding:9px 12px;font-size:.95rem;color:#333;background:#fafefa;width:100%;transition:border-color .2s}
+input:focus,textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 3px rgba(45,122,79,.15);background:white}
+textarea{resize:vertical;min-height:80px}
+.erro-input{border-color:#e53935!important;background:#fff5f5!important;box-shadow:0 0 0 3px rgba(229,57,53,.2)!important}
+.erro-msg{color:#c62828;font-size:.8rem;margin-top:4px;font-weight:600;display:block;min-height:18px}
+.alerta{display:none;background:#ffebee;border:2px solid #e53935;border-radius:10px;padding:14px 18px;margin-bottom:20px;color:#b71c1c;font-size:.92rem;font-weight:600;gap:10px;align-items:center}
+.alerta.on{display:flex}
+.rgroup{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.rgroup label{display:flex;align-items:center;gap:6px;font-size:.9rem;font-weight:500;cursor:pointer;color:#444;text-transform:none;letter-spacing:0}
+.rgroup input[type=radio]{width:16px;height:16px;accent-color:#2d7a4f}
+.trow{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:16px}
+.titem{display:flex;align-items:center;gap:10px}
+.titem>span{font-size:.88rem;font-weight:600;color:#2d5a3d;text-transform:uppercase;letter-spacing:.03em}
+.sw{position:relative;display:inline-block;width:44px;height:24px}
+.sw input{opacity:0;width:0;height:0}
+.sl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:24px;transition:.3s}
+.sl:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s}
+.sw input:checked+.sl{background:#2d7a4f}
+.sw input:checked+.sl:before{transform:translateX(20px)}
+.upload-area{border:2px dashed #81c784;border-radius:10px;padding:24px;text-align:center;background:#f1f8f1;cursor:pointer;display:block;transition:background .2s}
+.upload-area:hover{background:#e0f2e0;border-color:#2d7a4f}
+.upload-area input{display:none}
+.upload-icon{font-size:2.5rem;margin-bottom:10px}
+.upload-msg{font-size:.88rem;color:#555;line-height:1.6;margin-bottom:12px}
+.upload-btn{display:inline-block;background:#2d7a4f;color:white;padding:9px 22px;border-radius:6px;font-size:.9rem;font-weight:600}
+#file-list{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.fthumb{position:relative;width:110px;border:1.5px solid #a5d6a7;border-radius:10px;overflow:hidden;background:#f1f8f1;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;flex-direction:column;align-items:center}
+.fprev{width:100%;height:80px;display:flex;align-items:center;justify-content:center;background:#e8f5e9;overflow:hidden}
+.fprev img{width:100%;height:100%;object-fit:cover}
+.ficon{font-size:2.2rem}
+.fname{font-size:.72rem;color:#2d5a3d;font-weight:600;padding:6px 6px 2px;text-align:center;word-break:break-all;line-height:1.3}
+.fsize{font-size:.68rem;color:#888;padding-bottom:6px}
+.fremove{position:absolute;top:4px;right:4px;background:rgba(211,47,47,.85);color:white;border:none;border-radius:50%;width:22px;height:22px;font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fremove:hover{background:#b71c1c}
+.btn-principal{display:block;width:100%;background:linear-gradient(135deg,#1a4731,#2d7a4f);color:white;border:none;border-radius:10px;padding:16px;font-size:1.1rem;font-weight:700;cursor:pointer;letter-spacing:.04em;box-shadow:0 4px 14px rgba(45,122,79,.35);margin-top:8px}
+.btn-principal:hover{opacity:.92}
+#termo-section{display:none}
+.termo-card{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:40px 48px;margin-bottom:24px;border-top:6px solid #1a4731}
+.termo-header{text-align:center;margin-bottom:32px}
+.logo-termo{width:100px;height:100px;border-radius:50%;overflow:hidden;border:2px solid #c8e6c9;margin:0 auto 14px;background:white}
+.logo-termo img{width:100%;height:100%;object-fit:cover;display:block}
+.termo-header h2{font-size:1.25rem;color:#1a4731;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.termo-header p{font-size:.9rem;color:#666}
+.termo-intro{font-size:.95rem;line-height:1.7;color:#444;margin-bottom:28px}
+.tbloco{margin-bottom:24px}
+.tbloco h3{font-size:.95rem;color:#1a4731;text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:10px;border-bottom:1px solid #c8e6c9;padding-bottom:6px}
+.tbloco p,.tbloco ul{font-size:.92rem;line-height:1.75;color:#444}
+.tbloco ul{padding-left:20px}
+.tbloco li{margin-bottom:4px}
+.tdados{background:#f1f8f1;border:1px solid #a5d6a7;border-radius:8px;padding:16px 20px;margin-bottom:20px}
+.tdados p{font-size:.92rem;color:#333;margin-bottom:6px;line-height:1.5}
+.tdados strong{color:#1a4731}
+.tdata{margin-top:28px;font-size:.92rem;color:#444}
+.tactions{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap}
+.btn-estatuto{flex:1;background:white;color:#1a4731;border:2px solid #1a4731;border-radius:10px;padding:13px 20px;font-size:.95rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s}
+.btn-estatuto:hover{background:#1a4731;color:white}
+.btn-enviar{flex:2;background:linear-gradient(135deg,#1a4731,#2d7a4f);color:white;border:none;border-radius:10px;padding:13px 20px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(45,122,79,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-enviar:hover{opacity:.92}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.overlay.on{display:flex}
+.popup{background:white;border-radius:14px;padding:32px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.popup h3{font-size:1.1rem;color:#1a4731;margin-bottom:8px}
+.popup-sub{font-size:.88rem;color:#777;margin-bottom:20px}
+.ritem{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:.88rem}
+.ritem .rk{color:#2d5a3d;font-weight:600}
+.ritem .rv{color:#333;text-align:right;max-width:60%;word-break:break-word}
+.popup-btns{display:flex;gap:12px;margin-top:22px}
+.btn-nao{flex:1;background:#f0f0f0;color:#555;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:600;cursor:pointer}
+.btn-nao:hover{background:#e0e0e0}
+.btn-sim{flex:2;background:linear-gradient(135deg,#1a4731,#2d7a4f);color:white;border:none;border-radius:8px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer}
+.btn-sim:hover{opacity:.9}
+#sucesso-box{display:none;text-align:center;padding:60px 20px}
+.logo-sucesso{width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid #c8e6c9;margin:0 auto 20px;background:white}
+.logo-sucesso img{width:100%;height:100%;object-fit:cover;display:block}
+#sucesso-box .icone{font-size:3rem;margin-bottom:16px}
+#sucesso-box h2{color:#1a4731;font-size:1.4rem;margin-bottom:10px}
+#sucesso-box p{color:#555;font-size:.95rem;line-height:1.6}
+@media(max-width:600px){
+  .card,.termo-card{padding:20px 16px}
+  .fg.half,.fg.third{flex:0 0 100%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-header"><img src="images/logo.webp" alt="Logo"></div>
+  <h1>Associação de Moradores</h1>
+  <p>Residencial Jardim do Lago</p>
+</header>
+
+<div class="container">
+
+  <div id="form-section">
+
+    <div class="alerta" id="alerta">
+      <span style="font-size:1.4rem">⚠️</span>
+      <span>Preencha todos os campos obrigatórios destacados em vermelho antes de continuar.</span>
+    </div>
+
+    <div class="card">
+      <h2>👤 Dados do Proprietário</h2>
+      <div class="trow">
+        <div class="titem"><span>Principal?</span><label class="sw"><input type="checkbox" id="sw1"><span class="sl"></span></label></div>
+        <div class="titem"><span>Morador?</span><label class="sw"><input type="checkbox" id="sw2"><span class="sl"></span></label></div>
+      </div>
+      <div class="fg" style="margin-bottom:16px">
+        <label>Tipo de Pessoa</label>
+        <div class="rgroup">
+          <label><input type="radio" name="tp" value="fisica" checked> Pessoa Física</label>
+          <label><input type="radio" name="tp" value="juridica"> Pessoa Jurídica</label>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:16px">
+        <label>Sexo</label>
+        <div class="rgroup">
+          <label><input type="radio" name="sx" value="M"> Masculino</label>
+          <label><input type="radio" name="sx" value="F"> Feminino</label>
+          <label><input type="radio" name="sx" value="N"> Prefiro não informar</label>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:20px">
+        <label>Pessoa com Deficiência (PCD)?</label>
+        <div class="rgroup">
+          <label><input type="radio" name="pcd" value="nao" checked> Não</label>
+          <label><input type="radio" name="pcd" value="sim"> Sim</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg full">
+          <label>Nome Completo *</label>
+          <input type="text" id="nome" placeholder="Nome completo do proprietário">
+          <span class="erro-msg" id="e-nome"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg half">
+          <label>CPF *</label>
+          <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
+          <span class="erro-msg" id="e-cpf"></span>
+        </div>
+        <div class="fg half">
+          <label>RG</label>
+          <input type="text" id="rg" placeholder="00.000.000-0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg third">
+          <label>Nascimento</label>
+          <input type="text" id="nasc" placeholder="dd/mm/aaaa" maxlength="10">
+        </div>
+        <div class="fg" style="flex:2;min-width:180px">
+          <label>Profissão</label>
+          <input type="text" id="prof" placeholder="Sua profissão">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg full">
+          <label>E-mail Principal *</label>
+          <input type="email" id="email" placeholder="seuemail@exemplo.com">
+          <span class="erro-msg" id="e-email"></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg full">
+          <label>E-mails Alternativos</label>
+          <input type="text" id="emailalt" placeholder="outro@email.com, mais@email.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg half">
+          <label>Telefone 1 *</label>
+          <input type="tel" id="tel1" placeholder="(00) 00000-0000" maxlength="15">
+          <span class="erro-msg" id="e-tel1"></span>
+        </div>
+        <div class="fg half">
+          <label>Telefone 2</label>
+          <input type="tel" id="tel2" placeholder="(00) 00000-0000" maxlength="15">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg full">
+          <label>Observações</label>
+          <textarea id="obs" placeholder="Alguma observação relevante..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🏠 Endereço</h2>
+      <div class="trow">
+        <div class="titem"><span>Principal?</span><label class="sw"><input type="checkbox" id="sw3"><span class="sl"></span></label></div>
+        <div class="titem"><span>Correspondência?</span><label class="sw"><input type="checkbox" id="sw4"><span class="sl"></span></label></div>
+      </div>
+      <div class="fg" style="margin-bottom:16px">
+        <label>Título do Endereço</label>
+        <div class="rgroup">
+          <label><input type="radio" name="tend" value="Casa" checked> Casa</label>
+          <label><input type="radio" name="tend" value="Trabalho"> Trabalho</label>
+          <label><input type="radio" name="tend" value="Outro"> Outro</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg" style="flex:3;min-width:200px">
+          <label>Logradouro</label>
+          <input type="text" id="logr" placeholder="Rua, Avenida, etc.">
+        </div>
+        <div class="fg" style="min-width:140px">
+          <label>Complemento</label>
+          <input type="text" id="comp" placeholder="Apto, Bloco...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg half"><label>Cidade</label><input type="text" id="cidade" placeholder="Sua cidade"></div>
+        <div class="fg half"><label>Bairro</label><input type="text" id="bairro" placeholder="Seu bairro"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg third"><label>CEP</label><input type="text" id="cep" placeholder="00000-000" maxlength="9"></div>
+        <div class="fg third">
+          <label>Quadra *</label>
+          <input type="text" id="quadra" placeholder="Ex: Q-12">
+          <span class="erro-msg" id="e-quadra"></span>
+        </div>
+        <div class="fg third">
+          <label>Lote *</label>
+          <input type="text" id="lote" placeholder="Ex: L-05">
+          <span class="erro-msg" id="e-lote"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📎 Anexos</h2>
+      <label for="fileinput" class="upload-area">
+        <div class="upload-icon">📄</div>
+        <p class="upload-msg"><strong>Escaneie e anexe aqui o seu contrato de compra e venda, em formato PDF de preferência.</strong><br>Estamos em processo de regularização junto a CONSOLIDA e seu contrato será importante para unificarmos os dados e corrigirmos incoerências para poder atuar de maneira mais firme e objetiva nas cobranças junto a responsável pelo empreendimento.</p>
+        <span class="upload-btn">📁 Selecionar Arquivo(s)</span>
+        <input type="file" id="fileinput" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.xls,.xlsx">
+      </label>
+      <div id="file-list"></div>
+    </div>
+
+    <button type="button" class="btn-principal" id="btn-salvar">💾 Salvar os Dados e Continuar</button>
+  </div>
+
+  <div id="termo-section">
+    <div class="termo-card">
+      <div class="termo-header">
+        <div class="logo-termo"><img src="images/logo.webp" alt="Logo"></div>
+        <h2>Termo de Adesão</h2>
+        <p>Associação de Moradores do Residencial Jardim do Lago</p>
+      </div>
+      <p class="termo-intro">Pelo presente instrumento particular, o(a) abaixo identificado(a) declara sua adesão à <strong>Associação de Moradores do Residencial Jardim do Lago</strong>, pessoa jurídica de direito privado, sem fins lucrativos, constituída para representar os interesses coletivos dos moradores do Residencial Jardim do Lago.</p>
+      <div class="tbloco">
+        <h3>1. Identificação do Associado</h3>
+        <div class="tdados">
+          <p><strong>Nome completo:</strong> <span id="t-nome"></span></p>
+          <p><strong>CPF:</strong> <span id="t-cpf"></span></p>
+          <p><strong>RG:</strong> <span id="t-rg"></span></p>
+          <p><strong>Endereço no residencial (quadra/lote):</strong> <span id="t-ql"></span></p>
+          <p><strong>Telefone:</strong> <span id="t-tel"></span></p>
+          <p><strong>E-mail:</strong> <span id="t-email"></span></p>
+        </div>
+      </div>
+      <div class="tbloco">
+        <h3>2. Declaração de Adesão</h3>
+        <p>Declaro, de forma livre e voluntária, que desejo tornar-me associado(a) da Associação de Moradores do Residencial Jardim do Lago, comprometendo-me a cumprir integralmente:</p>
+        <ul><li>O Estatuto Social da Associação</li><li>As decisões aprovadas em assembleias</li><li>Os regulamentos internos eventualmente aprovados</li></ul>
+      </div>
+      <div class="tbloco">
+        <h3>3. Contribuição Associativa</h3>
+        <p>O associado declara estar ciente de que a manutenção da associação depende de contribuições financeiras destinadas a custear:</p>
+        <ul><li>Manutenção de áreas comuns</li><li>Segurança e melhorias do residencial</li><li>Despesas administrativas da associação</li><li>Projetos coletivos aprovados em assembleia</li></ul>
+        <p style="margin-top:10px">O valor da contribuição mensal será definido em assembleia e poderá ser atualizado conforme deliberação dos associados.</p>
+      </div>
+      <div class="tbloco">
+        <h3>4. Direitos do Associado</h3>
+        <ul><li>Participar das assembleias da associação</li><li>Votar e ser votado, conforme regras do estatuto</li><li>Apresentar sugestões e propostas de melhoria</li><li>Ter acesso às informações administrativas e financeiras da associação</li></ul>
+      </div>
+      <div class="tbloco">
+        <h3>5. Deveres do Associado</h3>
+        <ul><li>Cumprir o estatuto e regulamentos da associação</li><li>Respeitar as decisões coletivas aprovadas em assembleia</li><li>Manter suas contribuições em dia</li><li>Colaborar para a boa convivência entre os moradores</li></ul>
+      </div>
+      <div class="tbloco">
+        <h3>6. Desligamento</h3>
+        <p>O associado poderá solicitar seu desligamento a qualquer momento mediante comunicação formal à associação, permanecendo responsável pelas contribuições eventualmente em aberto até a data do pedido.</p>
+      </div>
+      <div class="tbloco">
+        <h3>7. Disposições Gerais</h3>
+        <p>O aceite deste termo implica aceitação integral das normas da Associação de Moradores do Residencial Jardim do Lago, bem como de futuras deliberações aprovadas em assembleia geral.</p>
+      </div>
+      <div class="tdata"><p><strong>Data:</strong> <span id="t-data"></span></p></div>
+      <div class="tactions">
+        <a href="https://drive.google.com/file/d/SEU_ID_AQUI/view" target="_blank" class="btn-estatuto">📄 Ver Estatuto da Associação</a>
+        <button type="button" class="btn-enviar" id="btn-enviar">✅ Assinar e Enviar Adesão</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sucesso-box">
+    <div class="logo-sucesso"><img src="images/logo.webp" alt="Logo"></div>
+    <div class="icone">✅</div>
+    <h2>Cadastro enviado com sucesso!</h2>
+    <p>Seus dados e o Termo de Adesão foram enviados para a Associação de Moradores do Residencial Jardim do Lago.<br>Em breve entraremos em contato. Obrigado!</p>
+  </div>
+
+</div>
+
+<div class="overlay" id="popup">
+  <div class="popup">
+    <h3>📋 Confirme seus dados antes de enviar</h3>
+    <p class="popup-sub">Verifique se todas as informações estão corretas. Após confirmar, os dados serão enviados à Associação.</p>
+    <div id="resumo"></div>
+    <div class="popup-btns">
+      <button type="button" class="btn-nao" id="btn-nao">✏️ Corrigir</button>
+      <button type="button" class="btn-sim" id="btn-sim">✅ Confirmar e Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var _arqs = [];
+
+function _gv(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function _gr(name) {
+  var el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '';
+}
+
+function _gc(id) {
+  var el = document.getElementById(id);
+  return el ? (el.checked ? 'Sim' : 'Não') : 'Não';
+}
+
+function _se(id, msg) {
+  var el = document.getElementById(id);
+  var em = document.getElementById('e-' + id);
+  if (el) el.classList.add('erro-input');
+  if (em) em.textContent = '⚠ ' + msg;
+}
+
+function _ce(id) {
+  var el = document.getElementById(id);
+  var em = document.getElementById('e-' + id);
+  if (el) el.classList.remove('erro-input');
+  if (em) em.textContent = '';
+}
+
+function _icone(n) {
+  var e = n.split('.').pop().toLowerCase();
+  return {pdf:'📕',doc:'📘',docx:'📘',xls:'📗',xlsx:'📗',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️'}[e] || '📄';
+}
+
+function _eimg(n) {
+  return /\.(jpg|jpeg|png|gif)
+$
+/i.test(n);
+}
+
+function _renderFiles() {
+  var lista = document.getElementById('file-list');
+  if (!lista) return;
+  lista.innerHTML = '';
+  for (var i = 0; i < _arqs.length; i++) {
+    (function(f, idx) {
+      var card = document.createElement('div');
+      card.className = 'fthumb';
+
+      var prev = document.createElement('div');
+      prev.className = 'fprev';
+
+      if (_eimg(f.name)) {
+        var img = document.createElement('img');
+        var url = URL.createObjectURL(f);
+        img.src = url;
+        img.onload = function() { URL.revokeObjectURL(url); };
+        prev.appendChild(img);
+      } else {
+        var ic = document.createElement('span');
+        ic.className = 'ficon';
+        ic.textContent = _icone(f.name);
+        prev.appendChild(ic);
+      }
+
+      var nm = document.createElement('div');
+      nm.className = 'fname';
+      nm.textContent = f.name.length > 16 ? f.name.slice(0,13) + '...' : f.name;
+
+      var sz = document.createElement('div');
+      sz.className = 'fsize';
+      sz.textContent = (f.size / 1024).toFixed(1) + ' KB';
+
+      var rb = document.createElement('button');
+      rb.type = 'button';
+      rb.className = 'fremove';
+      rb.textContent = '✕';
+      rb.onclick = function() {
+        _arqs.splice(idx, 1);
+        _renderFiles();
+      };
+
+      card.appendChild(prev);
+      card.appendChild(nm);
+      card.appendChild(sz);
+      card.appendChild(rb);
+      lista.appendChild(card);
+    })(_arqs[i], i);
+  }
+}
+
+// Mascaras
+document.getElementById('cpf').oninput = function() {
+  var v = this.value.replace(/\D/g,'').slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,'$1.$2');
+  v = v.replace(/(\d{3})(\d)/,'$1.$2');
+  v = v.replace(/(\d{3})(\d{1,2})
+$
+/,'$1-$2');
+  this.value = v;
+  _ce('cpf');
+};
+
+document.getElementById('nasc').oninput = function() {
+  var v = this.value.replace(/\D/g,'').slice(0,8);
+  v = v.replace(/(\d{2})(\d)/,'$1/$2');
+  v = v.replace(/(\d{2})(\d)/,'$1/$2');
+  this.value = v;
+};
+
+document.getElementById('cep').oninput = function() {
+  var v = this.value.replace(/\D/g,'').slice(0,8);
+  v = v.replace(/(\d{5})(\d)/,'$1-$2');
+  this.value = v;
+};
+
+document.getElementById('tel1').oninput = function() {
+  var v = this.value.replace(/\D/g,'').slice(0,11);
+  v = v.length <= 10 ? v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3') : v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');
+  this.value = v;
+  _ce('tel1');
+};
+
+document.getElementById('tel2').oninput = function() {
+  var v = this.value.replace(/\D/g,'').slice(0,11);
+  v = v.length <= 10 ? v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3') : v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');
+  this.value = v;
+};
+
+document.getElementById('nome').oninput = function() { _ce('nome'); };
+document.getElementById('email').oninput = function() { _ce('email'); };
+document.getElementById('quadra').oninput = function() { _ce('quadra'); };
+document.getElementById('lote').oninput = function() { _ce('lote'); };
+
+document.getElementById('fileinput').onchange = function() {
+  for (var i = 0; i < this.files.length; i++) {
+    var f = this.files[i];
+    var existe = false;
+    for (var j = 0; j < _arqs.length; j++) {
+      if (_arqs[j].name === f.name && _arqs[j].size === f.size) { existe = true; break; }
+    }
+    if (!existe) _arqs.push(f);
+  }
+  _renderFiles();
+  this.value = '';
+};
+
+document.getElementById('btn-salvar').onclick = function() {
+  var ok = true;
+  var campos = [
+    {id:'nome', msg:'Nome obrigatório'},
+    {id:'cpf', msg:'CPF obrigatório'},
+    {id:'email', msg:'E-mail obrigatório'},
+    {id:'tel1', msg:'Telefone obrigatório'},
+    {id:'quadra', msg:'Quadra obrigatória'},
+    {id:'lote', msg:'Lote obrigatório'}
+  ];
+
+  for (var i = 0; i < campos.length; i++) {
+    _ce(campos[i].id);
+  }
+  document.getElementById('alerta').classList.remove('on');
+
+  for (var i = 0; i < campos.length; i++) {
+    if (!_gv(campos[i].id)) {
+      _se(campos[i].id, campos[i].msg);
+      ok = false;
+    }
+  }
+
+  if (!ok) {
+    var al = document.getElementById('alerta');
+    al.classList.add('on');
+    al.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  var hoje = new Date();
+  var meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  var data = hoje.getDate() + ' de ' + meses[hoje.getMonth()] + ' de ' + hoje.getFullYear();
+
+  document.getElementById('t-nome').textContent = _gv('nome');
+  document.getElementById('t-cpf').textContent = _gv('cpf');
+  document.getElementById('t-rg').textContent = _gv('rg') || '—';
+  document.getElementById('t-ql').textContent = 'Quadra ' + _gv('quadra') + ' / Lote ' + _gv('lote');
+  document.getElementById('t-tel').textContent = _gv('tel1');
+  document.getElementById('t-email').textContent = _gv('email');
+  document.getElementById('t-data').textContent = data;
+
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('termo-section').style.display = 'block';
+  window.scrollTo(0, 0);
+};
+
+document.getElementById('btn-enviar').onclick = function() {
+  var sx = _gr('sx');
+  var itens = [
+    {k:'Nome', v:_gv('nome')},
+    {k:'CPF', v:_gv('cpf')},
+    {k:'RG', v:_gv('rg')||'—'},
+    {k:'Nascimento', v:_gv('nasc')||'—'},
+    {k:'Profissão', v:_gv('prof')||'—'},
+    {k:'Tipo Pessoa', v:_gr('tp')==='fisica'?'Pessoa Física':'Pessoa Jurídica'},
+    {k:'Sexo', v:sx==='M'?'Masculino':sx==='F'?'Feminino':'Não informado'},
+    {k:'PCD', v:_gr('pcd')==='sim'?'Sim':'Não'},
+    {k:'E-mail', v:_gv('email')},
+    {k:'E-mails Alt.', v:_gv('emailalt')||'—'},
+    {k:'Telefone 1', v:_gv('tel1')},
+    {k:'Telefone 2', v:_gv('tel2')||'—'},
+    {k:'Tipo Endereço', v:_gr('tend')},
+    {k:'Logradouro', v:_gv('logr')||'—'},
+    {k:'Complemento', v:_gv('comp')||'—'},
+    {k:'Cidade', v:_gv('cidade')||'—'},
+    {k:'Bairro', v:_gv('bairro')||'—'},
+    {k:'CEP', v:_gv('cep')||'—'},
+    {k:'Quadra', v:_gv('quadra')},
+    {k:'Lote', v:_gv('lote')},
+    {k:'Observações', v:_gv('obs')||'—'},
+    {k:'Arquivos', v:_arqs.length>0?_arqs.map(function(f){return f.name;}).join(', '):'Nenhum'}
+  ];
+
+  var html = '';
+  for (var i = 0; i < itens.length; i++) {
+    html += '<div class="ritem"><span class="rk">' + itens[i].k + '</span><span class="rv">' + itens[i].v + '</span></div>';
+  }
+  document.getElementById('resumo').innerHTML = html;
+  document.getElementById('popup').classList.add('on');
+};
+
+document.getElementById('btn-nao').onclick = function() {
+  document.getElementById('popup').classList.remove('on');
+};
+
+document.getElementById('btn-sim').onclick = function() {
+  document.getElementById('popup').classList.remove('on');
+
+  var sx = _gr('sx');
+  var linhas = [
+    'NOVO CADASTRO – RESIDENCIAL JARDIM DO LAGO',
+    '===========================================',
+    '',
+    'PROPRIETÁRIO',
+    '- Principal: ' + _gc('sw1'),
+    '- Morador: ' + _gc('sw2'),
+    '- Tipo: ' + (_gr('tp')==='fisica'?'Pessoa Física':'Pessoa Jurídica'),
+    '- Sexo: ' + (sx==='M'?'Masculino':sx==='F'?'Feminino':'Não informado'),
+    '- PCD: ' + (_gr('pcd')==='sim'?'Sim':'Não'),
+    '',
+    'DADOS PESSOAIS',
+    '- Nome: ' + _gv('nome'),
+    '- CPF: ' + _gv('cpf'),
+    '- RG: ' + (_gv('rg')||'—'),
+    '- Nascimento: ' + (_gv('nasc')||'—'),
+    '- Profissão: ' + (_gv('prof')||'—'),
+    '- E-mail: ' + _gv('email'),
+    '- E-mails Alt.: ' + (_gv('emailalt')||'—'),
+    '- Telefone 1: ' + _gv('tel1'),
+    '- Telefone 2: ' + (_gv('tel2')||'—'),
+    '- Observações: ' + (_gv('obs')||'—'),
+    '',
+    'ENDEREÇO',
+    '- Principal: ' + _gc('sw3'),
+    '- Correspondência: ' + _gc('sw4'),
+    '- Tipo: ' + _gr('tend'),
+    '- Logradouro: ' + (_gv('logr')||'—'),
+    '- Complemento: ' + (_gv('comp')||'—'),
+    '- Cidade: ' + (_gv('cidade')||'—'),
+    '- Bairro: ' + (_gv('bairro')||'—'),
+    '- CEP: ' + (_gv('cep')||'—'),
+    '- Quadra: ' + _gv('quadra'),
+    '- Lote: ' + _gv('lote'),
+    '',
+    'ARQUIVOS'
+  ];
+
+  if (_arqs.length > 0) {
+    for (var i = 0; i < _arqs.length; i++) {
+      linhas.push('- ' + _arqs[i].name + ' (' + (_arqs[i].size/1024).toFixed(1) + ' KB)');
+    }
+  } else {
+    linhas.push('- Nenhum');
+  }
+
+  linhas.push('');
+  linhas.push('TERMO DE ADESÃO: ACEITO');
+  linhas.push('Data: ' + new Date().toLocaleDateString('pt-BR'));
+
+  var corpo = linhas.join('\n');
+  var subj = encodeURIComponent('Cadastro – ' + _gv('nome') + ' – Q' + _gv('quadra') + ' L' + _gv('lote'));
+  var body = encodeURIComponent(corpo);
+
+  window.location.href = 'mailto:residencialjardimdolago.mogi@gmail.com?subject=' + subj + '&body=' + body;
+
+  document.getElementById('termo-section').style.display = 'none';
+  document.getElementById('sucesso-box').style.display = 'block';
+  window.scrollTo(0, 0);
+};
+</script>
+
+</body>
+</html>
